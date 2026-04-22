@@ -60,17 +60,7 @@ const MenuPage = () => {
               </ul>
             </div>
 
-            {/* Location */}
-            <div className="border border-gray-200 p-5 bg-[#fafafa]">
-              <h3 className="text-[14px] font-bold text-brand-dark mb-3">Location</h3>
-              <ul className="space-y-[6px] pl-2 text-[13px]">
-                <li className="text-gray-800 cursor-pointer hover:text-brand-primary transition-[color]">Bali</li>
-                <li className="text-gray-800 cursor-pointer hover:text-brand-primary transition-[color]">Balikpapan</li>
-                <li className="text-gray-800 cursor-pointer hover:text-brand-primary transition-[color]">Bandung</li>
-                <li className="text-gray-800 cursor-pointer hover:text-brand-primary transition-[color]">Batam</li>
-              </ul>
-              <div className="mt-4 text-[13px] text-gray-800 cursor-pointer hover:text-brand-primary transition-colors font-medium">Other Cities</div>
-            </div>
+
 
             {/* Category */}
             <div className="border border-gray-200 p-5 bg-[#fafafa]">
