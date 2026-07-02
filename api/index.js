@@ -8,7 +8,7 @@ const app = express();
 
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
+  limits: { fileSize: 4 * 1024 * 1024 } // 4MB limit (Vercel max 4.5MB)
 });
 
 // CORS: izinkan frontend dari Vercel dan localhost
@@ -249,8 +249,13 @@ app.get('/api/history', adminAuth, async (req, res) => {
   res.json(data);
 });
 
-// Railway otomatis mengisi process.env.PORT, fallback ke 5000 untuk dev lokal
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Backend server running on port ${PORT}`);
-});
+// Untuk development lokal
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`Backend server running on port ${PORT}`);
+  });
+}
+
+// Ekspor app untuk Vercel Serverless Functions
+module.exports = app;

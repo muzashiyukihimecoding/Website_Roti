@@ -45,7 +45,7 @@ const Categories = () => {
       <div className="mb-4 text-brand-primary mt-4">
         <ShoppingCart size={64} strokeWidth={1.5} />
       </div>
-      
+
       {/* Title */}
       <h2 className="text-[26px] font-normal text-brand-dark tracking-wide mb-10 font-sans">
         Shop By Categories
@@ -66,7 +66,7 @@ const Categories = () => {
                   alt={category.name} 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out"
                   loading="lazy"
-                 />
+                />
               </div>
               <div className="border-t border-gray-200 py-3 text-center bg-white">
                 <h3 className="text-[14px] text-gray-800 font-medium tracking-tight">

@@ -7,7 +7,7 @@ const NewsPromoPage = () => {
   const [promos, setPromos] = useState([]);
 
   useEffect(() => {
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '' : 'http://localhost:5000');
     fetch(`${API_URL}/api/promos`)
       .then(res => res.json())
       .then(data => {

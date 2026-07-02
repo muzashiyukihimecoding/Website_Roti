@@ -108,7 +108,7 @@ const SocialPage = () => {
               <p className="text-[15px] font-bold text-brand-dark leading-tight">Our Instagram</p>
               <p className="text-[14px] font-bold text-brand-dark mb-3">@dbakeryindonesia</p>
               <p className="text-[11px] text-gray-800 leading-relaxed font-medium">
-                One of the first pioneer in modern bakery business in Indonesia. Established in 1978 with more than 470 outlets & 25 branches.
+                One of the first pioneer in homemade bakery business in Indonesia. Established in 2018 with more than 2 outlets & 7 branches.
               </p>
             </div>
           </div>

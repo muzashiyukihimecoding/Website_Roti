@@ -83,21 +83,24 @@ const MomentPage = () => {
   return (
     <div className="bg-white min-h-screen pb-20">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 mt-6">
-        
         {/* Page Title & Breadcrumb */}
         <div className="mb-12">
-          <h1 className="text-[26px] font-medium text-brand-primary tracking-wide mb-1 font-sans">Choose Your Moment</h1>
+          <h1 className="text-[26px] font-medium text-brand-primary tracking-wide mb-1 font-sans">
+            Choose Your Moment
+          </h1>
           <div className="text-[12px] text-gray-800 font-medium flex gap-2">
-             <Link to="/" className="cursor-pointer hover:text-brand-primary">Home</Link> 
-             <span>/</span> 
-             <span>Choose Your Moment</span>
+            <Link to="/" className="cursor-pointer hover:text-brand-primary">
+              Home
+            </Link>
+            <span>/</span>
+            <span>Choose Your Moment</span>
           </div>
         </div>
 
         {/* Content Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
           {moments.map((moment, index) => (
-            <div 
+            <div
               key={index}
               onClick={() => handleMomentClick(moment.id)}
               className={`aspect-square relative overflow-hidden group cursor-pointer shadow-sm hover:shadow-lg transition-all duration-300 ${selectedMoment === moment.id ? 'ring-4 ring-brand-primary ring-offset-2' : ''}`}
@@ -108,7 +111,7 @@ const MomentPage = () => {
                 alt={moment.title} 
                 className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 ${selectedMoment === moment.id ? 'scale-110' : 'group-hover:scale-110'}`} 
               />
-              
+
               {/* Orange Color Overlay */}
               <div className={`absolute inset-0 transition-colors duration-500 ${selectedMoment === moment.id ? 'bg-[#985827]/40' : 'bg-[#985827]/60 mix-blend-multiply group-hover:bg-[#985827]/40'}`}></div>
               
@@ -145,11 +148,9 @@ const MomentPage = () => {
             </div>
           )}
         </div>
-
       </div>
     </div>
   );
 };
 
 export default MomentPage;
-
