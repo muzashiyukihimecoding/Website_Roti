@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const images = [
+const fallbackImages = [
   "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=1920",
   "https://images.unsplash.com/photo-1587668178277-295251f900ce?auto=format&fit=crop&q=80&w=1920",
   "https://images.unsplash.com/photo-1608198093002-ad4e005484ec?auto=format&fit=crop&q=80&w=1920"
@@ -8,15 +8,37 @@ const images = [
 
 const HeroCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [images, setImages] = useState(fallbackImages);
+
+  // Fetch promos
+  useEffect(() => {
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    fetch(`${API_URL}/api/promos`)
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          const promoImages = data
+            .filter(item => item.type === 'promo')
+            .map(item => item.image);
+            
+          if (promoImages.length > 0) {
+            setImages(promoImages);
+          }
+        }
+      })
+      .catch(err => console.error("Error fetching promos:", err));
+  }, []);
 
   // Auto-slide effect
   useEffect(() => {
+    if (images.length === 0) return;
+    
     const timer = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex === images.length - 1 ? 0 : prevIndex + 1));
     }, 4000); // Change image every 4 seconds
 
     return () => clearInterval(timer);
-  }, []);
+  }, [images.length]);
 
   return (
     <div className="relative w-full h-[250px] md:h-[400px] lg:h-[500px] xl:h-[600px] overflow-hidden bg-gray-100 group">

@@ -1,20 +1,44 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ShoppingCart } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { fetchProducts } from '../data/products';
 
-const categories = [
-  { name: 'Breads', image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=600' },
-  { name: 'Traditional Snacks', image: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&q=80&w=600' },
-  { name: 'Chiffon & Roll Cakes', image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&q=80&w=600' },
-  { name: 'Donuts', image: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&q=80&w=600' },
-  { name: 'Pastry and Danish', image: 'https://images.unsplash.com/photo-1509365465974-eb15c6deff6f?auto=format&fit=crop&q=80&w=600' },
-  { name: 'Pudding', image: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&q=80&w=600' },
-  { name: 'Cakes', image: 'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&q=80&w=600' },
-  { name: 'Lapis', image: 'https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?auto=format&fit=crop&q=80&w=600' },
-  { name: 'Cookies', image: 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&q=80&w=600' },
-  { name: 'Snack Box', image: 'https://images.unsplash.com/photo-1587668178277-295251f900ce?auto=format&fit=crop&q=80&w=600' },
+const baseCategories = [
+  { name: 'All Product', value: 'all_product', image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=600' },
+  { name: 'Best Seller', value: 'best_seller', image: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&q=80&w=600' },
+  { name: 'Roti Manis', value: 'roti_manis', image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&q=80&w=600' },
+  { name: 'Roti Gurih', value: 'roti_gurih', image: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&q=80&w=600' },
+  { name: 'Roti Box', value: 'roti_box', image: 'https://images.unsplash.com/photo-1587668178277-295251f900ce?auto=format&fit=crop&q=80&w=600' },
 ];
 
 const Categories = () => {
+  const navigate = useNavigate();
+
+  const { data: products = [] } = useQuery({
+    queryKey: ['products'],
+    queryFn: fetchProducts,
+    staleTime: 1000 * 60 * 5,
+  });
+
+  const displayCategories = useMemo(() => {
+    return baseCategories.map(cat => {
+      let image = cat.image;
+      if (products && products.length > 0) {
+        if (cat.value === 'all_product') {
+           // Use the last product's image to ensure it's different from the first/best seller
+           image = products[products.length - 1]?.image || cat.image;
+        } else {
+           const product = products.find(p => p.category === cat.value);
+           if (product) {
+             image = product.image;
+           }
+        }
+      }
+      return { ...cat, image };
+    });
+  }, [products]);
+
   return (
     <section className="py-12 bg-white flex flex-col items-center">
       {/* Red Cart Icon matching reference */}
@@ -30,13 +54,13 @@ const Categories = () => {
       {/* Grid */}
       <div className="max-w-[1100px] w-full mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {categories.map((category, index) => (
+          {displayCategories.map((category, index) => (
             <div 
               key={index} 
+              onClick={() => navigate(`/menu?category=${category.value}`)}
               className="group cursor-pointer border border-gray-200 bg-white flex flex-col hover:shadow-lg transition-shadow duration-300"
             >
               <div className="w-full aspect-square overflow-hidden bg-gray-50 flex items-center justify-center relative">
-                 {/* Collage overlay simulation for specific items if you look closely at the Holland Bakery site, some uses collages. We use single expressive images here for clean layout */}
                  <img 
                   src={category.image} 
                   alt={category.name} 

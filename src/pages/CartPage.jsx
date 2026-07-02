@@ -44,21 +44,44 @@ const CartPage = () => {
     setDraftNote('');
   };
 
-  const handlePurchase = () => {
+  const handlePurchase = async () => {
     const phoneNumber = "6285742384630"; // Nomor WhatsApp Admin d'Bakery
     let message = "Halo d'Bakery, saya ingin memesan:\n\n";
+    let orderDetailsText = "";
     
     cartItems.forEach((item, index) => {
-      message += `${index + 1}. ${item.name} (${item.quantity}x) - Rp ${formatPrice(item.totalPrice)}`;
+      let line = `${index + 1}. ${item.name} (${item.quantity}x) - Rp ${formatPrice(item.totalPrice)}`;
+      message += line;
+      orderDetailsText += line + "\n";
       // Tambahkan catatan jika ada
       if (notes[item.id] && notes[item.id].trim() !== '') {
-        message += `\n   📝 Catatan: ${notes[item.id]}`;
+        let noteLine = `   📝 Catatan: ${notes[item.id]}`;
+        message += `\n${noteLine}`;
+        orderDetailsText += `${noteLine}\n`;
       }
       message += '\n';
     });
     
     message += `\n*Total Pembayaran: Rp ${formatPrice(totalAmount)}*\n\nMohon informasi ketersediaan dan panduan pembayarannya. Terima kasih!`;
     
+    // Simpan pesanan ke database
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const res = await fetch(`${API_URL}/api/orders`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          order_details: orderDetailsText.trim(),
+          total_amount: totalAmount
+        })
+      });
+      if (!res.ok) {
+        console.error("Gagal menyimpan pesanan ke database.");
+      }
+    } catch (err) {
+      console.error("Error saving order:", err);
+    }
+
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
     

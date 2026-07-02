@@ -1,25 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { useQuery } from '@tanstack/react-query';
 import ProductCard from './ProductCard';
 import { fetchProducts } from '../data/products';
 
 const ProductList = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const data = await fetchProducts();
-        setProducts(data);
-      } catch (error) {
-        console.error("Failed to fetch products:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    loadData();
-  }, []);
+  const { data: products = [], isLoading: loading } = useQuery({
+    queryKey: ['products'],
+    queryFn: fetchProducts,
+    staleTime: 1000 * 60 * 5, // Cache for 5 minutes
+  });
 
   // Skeleton Card Component matching new design
   const SkeletonCard = () => (

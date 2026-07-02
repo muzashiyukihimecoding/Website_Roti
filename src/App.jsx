@@ -1,32 +1,58 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React, { Suspense } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
-import HomePage from './pages/HomePage';
-import MenuPage from './pages/MenuPage';
-import SocialPage from './pages/SocialPage';
-import NewsPromoPage from './pages/NewsPromoPage';
-import MomentPage from './pages/MomentPage';
-import FaqPage from './pages/FaqPage';
-import AboutPage from './pages/AboutPage';
-import LoginPage from './pages/LoginPage';
-import CartPage from './pages/CartPage';
+
+// Lazy loaded components
+const HomePage = React.lazy(() => import('./pages/HomePage'));
+const MenuPage = React.lazy(() => import('./pages/MenuPage'));
+const SocialPage = React.lazy(() => import('./pages/SocialPage'));
+const NewsPromoPage = React.lazy(() => import('./pages/NewsPromoPage'));
+const MomentPage = React.lazy(() => import('./pages/MomentPage'));
+const FaqPage = React.lazy(() => import('./pages/FaqPage'));
+const AboutPage = React.lazy(() => import('./pages/AboutPage'));
+const LoginPage = React.lazy(() => import('./pages/LoginPage'));
+const CartPage = React.lazy(() => import('./pages/CartPage'));
+const AdminPage = React.lazy(() => import('./pages/AdminPage'));
+
+// Fallback Loading Component
+const PageLoader = () => (
+  <div className="flex items-center justify-center min-h-[50vh]">
+    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-primary"></div>
+  </div>
+);
 
 function App() {
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith('/admin');
+
+  // Halaman admin punya layout sendiri (tanpa Header & Footer)
+  if (isAdmin) {
+    return (
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route path="/admin" element={<AdminPage />} />
+        </Routes>
+      </Suspense>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-white flex flex-col font-sans">
       <Header />
       <main className="flex-grow">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/menu" element={<MenuPage />} />
-          <Route path="/social" element={<SocialPage />} />
-          <Route path="/news-promo" element={<NewsPromoPage />} />
-          <Route path="/moment" element={<MomentPage />} />
-          <Route path="/faq" element={<FaqPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/cart" element={<CartPage />} />
-        </Routes>
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/menu" element={<MenuPage />} />
+            <Route path="/social" element={<SocialPage />} />
+            <Route path="/news-promo" element={<NewsPromoPage />} />
+            <Route path="/moment" element={<MomentPage />} />
+            <Route path="/faq" element={<FaqPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/cart" element={<CartPage />} />
+          </Routes>
+        </Suspense>
       </main>
       
       {/* Footer */}
