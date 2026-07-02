@@ -19,14 +19,7 @@ const allowedOrigins = [
 ].filter(Boolean);
 
 app.use(cors({
-  origin: (origin, callback) => {
-    // Izinkan request tanpa origin (misal: curl, Postman) atau dari allowedOrigins
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: (origin, callback) => callback(null, true),
   credentials: true,
 }));
 
